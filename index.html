@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Wania ✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f0c20 0%, #1a102f 50%, #281236 100%);
+      --glass-bg: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --accent-pink: #ff65a3;
+      --accent-purple: #a855f7;
+      --accent-glow: #ff85e1;
+      --text-main: #ffffff;
+      --text-sub: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Ambient Background Light Balls */
+    .glow-ball-1, .glow-ball-2 {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .glow-ball-1 {
+      width: 350px;
+      height: 350px;
+      background: rgba(255, 101, 163, 0.25);
+      top: 10%;
+      left: 15%;
+    }
+    .glow-ball-2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(168, 85, 247, 0.2);
+      bottom: 10%;
+      right: 15%;
+    }
+
+    /* Screens Styling */
+    .screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      background: #0f0c20;
+      transition: opacity 0.6s ease, visibility 0.6s;
+    }
+
+    .hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* REPLAY / BACK BUTTON */
+    .btn-replay {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 50;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(15px);
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .btn-replay:hover {
+      background: var(--accent-pink);
+      border-color: var(--accent-pink);
+      transform: translateY(-2px);
+    }
+
+    /* 1. PASSCODE LOCK */
+    .passcode-box {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(25px);
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      max-width: 380px;
+      width: 90%;
+      z-index: 2;
+    }
+
+    .passcode-box h2 {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, #ff65a3, #ff85e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 600;
+    }
+
+    .passcode-box p {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      margin-bottom: 1.8rem;
+    }
+
+    .pin-input {
+      width: 100%;
+      padding: 0.9rem;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      text-align: center;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      outline: none;
+      margin-bottom: 1.2rem;
+      transition: all 0.3s;
+    }
+
+    .pin-input:focus {
+      border-color: var(--accent-pink);
+      box-shadow: 0 0 15px rgba(255, 101, 163, 0.3);
+    }
+
+    .btn-unlock {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+      border: none;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 101, 163, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-unlock:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(255, 101, 163, 0.4);
+    }
+
+    .error-msg {
+      color: #ff65a3;
+      font-size: 0.85rem;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    /* 2. ELEGANT CAKE & CANDLE */
+    .cake-box {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .cake-container {
+      position: relative;
+      margin-top: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .plate {
+      width: 250px;
+      height: 12px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      margin-top: -2px;
+    }
+
+    .layer {
+      border-radius: 12px 12px 0 0;
+      position: relative;
+      box-shadow: inset 0 -6px 0 rgba(0,0,0,0.15);
+    }
+
+    .layer-bottom {
+      width: 200px;
+      height: 50px;
+      background: linear-gradient(135deg, #ff65a3, #f43f5e);
+    }
+
+    .layer-middle {
+      width: 150px;
+      height: 44px;
+      background: linear-gradient(135deg, #a855f7, #8b5cf6);
+    }
+
+    .layer-top {
+      width: 100px;
+      height: 38px;
+      background: linear-gradient(135deg, #f472b6, #ff85e1);
+    }
+
+    .candle {
+      position: absolute;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 35px;
+      background: repeating-linear-gradient(45deg, #fff, #fff 6px, #ff65a3 6px, #ff65a3 12px);
+      border-radius: 4px;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .flame {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 22px;
+      background: #ffc107;
+      border-radius: 50% 50% 20% 20%;
+      box-shadow: 0 0 12px #ff9800, 0 0 25px #ff5722;
+      animation: flicker 0.6s infinite alternate;
+    }
+
+    .flame.off {
+      display: none;
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1.15); }
+    }
+
+    /* 3. MAIN CONTENT DISPLAY */
+    #canvas-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .main-content {
+      width: 100%;
+      max-width: 950px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5rem;
+      padding: 3rem 1.5rem;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    .badge-top {
+      color: var(--accent-pink);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    h1.hero-title {
+      font-family: 'Sacramento', cursive;
+      font-size: 4.2rem;
+      font-weight: 400;
+      background: linear-gradient(135deg, #ffffff 30%, #ff85e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+
+    .message-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 580px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+
+    .message-card h3 {
+      color: var(--accent-glow);
+      margin-bottom: 0.6rem;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .message-card p {
+      font-size: 0.98rem;
+      line-height: 1.7;
+      color: var(--text-sub);
+    }
+
+    /* SCRATCH CARD FEATURE */
+    .scratch-container {
+      position: relative;
+      width: 320px;
+      height: 160px;
+      margin: 0 auto;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--glass-border);
+    }
+
+    .scratch-secret {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #ff65a3, #a855f7);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      text-align: center;
+      color: #fff;
+    }
+
+    .scratch-secret h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .scratch-secret p {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    #scratch-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    /* POLAROID STYLE PHOTO GALLERY */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+      width: 100%;
+    }
+
+    .photo-card {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 12px 12px 18px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .photo-card:hover {
+      transform: translateY(-8px) rotate(1deg);
+      border-color: var(--accent-pink);
+      box-shadow: 0 18px 40px rgba(255, 101, 163, 0.3);
+    }
+
+    .photo-img-wrapper {
+      width: 100%;
+      height: 270px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .photo-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .photo-caption {
+      font-size: 0.92rem;
+      color: var(--accent-glow);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* FULLSCREEN LIGHTBOX MODAL */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 85vh;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      border: 2px solid var(--glass-border);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-ball-1"></div>
+  <div class="glow-ball-2"></div>
+
+  <!-- REPLAY / BACK BUTTON -->
+  <button class="btn-replay" onclick="resetToBeginning()">Replay 🔄</button>
+
+  <!-- SCREEN 1: PASSCODE LOCK -->
+  <div class="screen" id="passcode-screen">
+    <div class="passcode-box">
+      <h2>Secret Birthday Lock 🔐</h2>
+      <p>Enter your Birthday Date to unlock the surprise! 🎂</p>
+      <input type="text" id="pin-input" class="pin-input" placeholder="Enter Birth Date (e.g., 3)">
+      <button class="btn-unlock" onclick="checkPin()">Unlock Surprise ✨</button>
+      <div class="error-msg" id="error-msg">Hint: Enter '3', '03', or '3 Sep' 😉</div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: CAKE & CANDLE -->
+  <div class="screen hidden" id="cake-screen">
+    <div class="cake-box">
+      <h2 style="font-size: 2.2rem; color: #ff85e1; margin-bottom: 0.4rem;">Make a Wish! 🎂</h2>
+      <p style="color: var(--text-sub); font-size: 0.92rem;">Click on the candle flame to blow it out!</p>
+      
+      <div class="cake-container">
+        <div class="layer layer-top">
+          <div class="candle" onclick="blowCandle()">
+            <div class="flame" id="flame"></div>
+          </div>
+        </div>
+        <div class="layer layer-middle"></div>
+        <div class="layer layer-bottom"></div>
+        <div class="plate"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: MAIN HAPPY BIRTHDAY WANIA CONTENT -->
+  <canvas id="canvas-bg"></canvas>
+
+  <div class="main-content">
+    <header>
+      <div class="badge-top">Special Day</div>
+      <h1 class="hero-title">Happy Birthday Wania ✨</h1>
+    </header>
+
+    <audio id="bg-music" loop preload="auto">
+      <source src="Happy Birthday To You Ji - DjBaap.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="message-card">
+      <h3>To My Dearest Friend 💖</h3>
+      <p>Wishing you a year filled with happiness, endless growth, and unforgettable memories. Thank you for being such an amazing person in my life!</p>
+    </div>
+
+    <!-- SCRATCH CARD FEATURE -->
+    <div style="text-align: center;">
+      <p style="color: var(--accent-glow); font-size: 0.9rem; margin-bottom: 0.6rem; font-weight: 500;">✨ Scratch below to reveal a secret note! ✨</p>
+      <div class="scratch-container">
+        <div class="scratch-secret">
+          <h4>You Are Special! 🌟</h4>
+          <p>May all your dreams come true this year! Never stop smiling. 😊💖</p>
+        </div>
+        <canvas id="scratch-canvas" width="320" height="160"></canvas>
+      </div>
+    </div>
+
+    <!-- PHOTO GALLERY -->
+    <div class="photo-grid">
+      <div class="photo-card" onclick="openLightbox('images/1.jpeg')">
+        <div class="photo-img-wrapper"><img src="images/1.jpeg" alt="Memory 1"></div>
+        <div class="photo-caption">Pretty & Cute 🌸</div>
+      </div>
+      <div class="photo-card" onclick="openLightbox('images/2.jpeg')">
+        <div class="photo-img-wrapper"><img src="images/2.jpeg" alt="Memory 2"></div>
+        <div class="photo-caption">Pure Smile 😊</div>
+      </div>
+      <div class="photo-card" onclick="openLightbox('images/3.jpeg')">
+        <div class="photo-img-wrapper"><img src="images/3.jpeg" alt="Memory 3"></div>
+        <div class="photo-caption">Drama Queen 👑</div>
+      </div>
+      <div class="photo-card" onclick="openLightbox('images/4.jpeg')">
+        <div class="photo-img-wrapper"><img src="images/4.jpeg" alt="Memory 4"></div>
+        <div class="photo-caption">Bestie Vibe 💕</div>
+      </div>
+      <div class="photo-card" onclick="openLightbox('images/5.jpeg')">
+        <div class="photo-img-wrapper"><img src="images/5.jpeg" alt="Memory 5"></div>
+        <div class="photo-caption">Glow Girl ✨</div>
+      </div>
+      <div class="photo-card" onclick="openLightbox('images/6.jpeg')">
+        <div class="photo-img-wrapper"><img src="images/6.jpeg" alt="Memory 6"></div>
+        <div class="photo-caption">Unforgettable 💖</div>
+      </div>
+      <div class="photo-card" onclick="openLightbox('images/7.jpeg')">
+        <div class="photo-img-wrapper"><img src="images/7.jpeg" alt="Memory 7"></div>
+        <div class="photo-caption">Forever Special 🌟</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX MODAL FOR FULLSCREEN IMAGE VIEW -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Full Image">
+  </div>
+
+  <script>
+    // 1. PIN CHECK LOGIC WITH HINT SUPPORT
+    function checkPin() {
+      const userPin = document.getElementById('pin-input').value.trim().toLowerCase();
+      const errorMsg = document.getElementById('error-msg');
+
+      // Valid options for Wania's Birthday Date
+      const validDates = ["3", "03", "3 september", "3 sep", "0309", "3/9", "03/09"];
+
+      if (validDates.includes(userPin)) {
+        document.getElementById('passcode-screen').classList.add('hidden');
+        document.getElementById('cake-screen').classList.remove('hidden');
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    }
+
+    // Enter key triggers unlock
+    document.getElementById('pin-input').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        checkPin();
+      }
+    });
+
+    // 2. CANDLE BLOW LOGIC
+    function blowCandle() {
+      document.getElementById('flame').classList.add('off');
+      
+      const music = document.getElementById('bg-music');
+      music.play().catch(e => console.log("Audio autoplay prevented"));
+
+      launchCelebration();
+
+      setTimeout(() => {
+        document.getElementById('cake-screen').classList.add('hidden');
+        initScratchCard();
+      }, 1000);
+    }
+
+    // 3. REPLAY / RESET FUNCTION
+    function resetToBeginning() {
+      document.getElementById('flame').classList.remove('off');
+      document.getElementById('passcode-screen').classList.remove('hidden');
+      document.getElementById('cake-screen').classList.add('hidden');
+      document.getElementById('pin-input').value = '';
+      document.getElementById('error-msg').style.display = 'none';
+
+      const music = document.getElementById('bg-music');
+      music.pause();
+      music.currentTime = 0;
+    }
+
+    // 4. LIGHTBOX FUNCTIONS
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    // 5. SCRATCH CARD SCRIPT
+    function initScratchCard() {
+      const sCanvas = document.getElementById('scratch-canvas');
+      const sCtx = sCanvas.getContext('2d');
+      
+      sCtx.globalCompositeOperation = 'source-over';
+      sCtx.fillStyle = '#94a3b8';
+      sCtx.fillRect(0, 0, sCanvas.width, sCanvas.height);
+      
+      sCtx.font = '600 16px Outfit, sans-serif';
+      sCtx.fillStyle = '#475569';
+      sCtx.textAlign = 'center';
+      sCtx.fillText('Scratch Me! 🪙', sCanvas.width / 2, sCanvas.height / 2 + 5);
+
+      let isScratching = false;
+
+      function scratch(e) {
+        if (!isScratching) return;
+        const rect = sCanvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+        sCtx.globalCompositeOperation = 'destination-out';
+        sCtx.beginPath();
+        sCtx.arc(x, y, 20, 0, Math.PI * 2);
+        sCtx.fill();
+      }
+
+      sCanvas.addEventListener('mousedown', () => isScratching = true);
+      sCanvas.addEventListener('mouseup', () => isScratching = false);
+      sCanvas.addEventListener('mousemove', scratch);
+
+      sCanvas.addEventListener('touchstart', () => isScratching = true);
+      sCanvas.addEventListener('touchend', () => isScratching = false);
+      sCanvas.addEventListener('touchmove', scratch);
+    }
+
+    // 6. CONFETTI ANIMATION
+    const canvas = document.getElementById('canvas-bg');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    let confetti = [];
+    function launchCelebration() {
+      for (let i = 0; i < 160; i++) {
+        confetti.push({
+          x: width / 2,
+          y: height / 2,
+          vx: (Math.random() - 0.5) * 18,
+          vy: (Math.random() - 0.8) * 18,
+          size: Math.random() * 7 + 4,
+          color: `hsl(${Math.random() * 60 + 300}, 100%, 70%)`,
+          alpha: 1,
+          rotation: Math.random() * 360
+        });
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      confetti.forEach((c, index) => {
+        c.x += c.vx;
+        c.y += c.vy;
+        c.vy += 0.2;
+        c.alpha -= 0.008;
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(c.alpha, 0);
+        ctx.translate(c.x, c.y);
+        ctx.rotate((c.rotation * Math.PI) / 180);
+        ctx.fillStyle = c.color;
+        ctx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size);
+        ctx.restore();
+
+        if (c.alpha <= 0) confetti.splice(index, 1);
+      });
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>
